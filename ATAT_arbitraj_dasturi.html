@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xalqaro Tijorat Arbitraji — Axborot Tizimi (ATAT)</title>
+<style>
+  :root{
+    --ink:#12203a; --ink-soft:#2c3e5c; --paper:#f6f4ee; --card:#ffffff;
+    --line:#d9d3c6; --brass:#a8823c; --brass-soft:#c9a35f; --accent:#1f3d6e;
+    --muted:#6b6558; --tag:#eae4d6; --ok:#3a6b4f; --danger:#8c3b3b;
+    --shadow:0 1px 2px rgba(18,32,58,.06),0 8px 24px rgba(18,32,58,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Georgia','Times New Roman',serif;background:var(--paper);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+
+  /* Header */
+  header{background:var(--ink);color:#f6f4ee;border-bottom:3px solid var(--brass)}
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:20px 0;gap:16px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:14px}
+  .seal{width:52px;height:52px;border:2px solid var(--brass-soft);border-radius:50%;display:grid;place-items:center;font-family:Georgia,serif;font-weight:700;font-size:19px;color:var(--brass-soft);letter-spacing:1px;flex-shrink:0}
+  .brand h1{font-size:19px;font-weight:700;letter-spacing:.3px;line-height:1.2}
+  .brand .sub{font-size:11.5px;color:#b9c2d4;font-family:system-ui,sans-serif;letter-spacing:.6px;text-transform:uppercase;margin-top:3px}
+  .meta{font-family:system-ui,sans-serif;font-size:11px;color:#9fabc2;text-align:right;line-height:1.7}
+  .meta b{color:#d9e0ec;font-weight:600}
+
+  /* Search */
+  .searchband{background:var(--ink-soft);padding:16px 0}
+  .searchrow{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .search{flex:1;min-width:240px;position:relative}
+  .search input{width:100%;padding:12px 14px 12px 40px;border:1px solid #46587a;border-radius:7px;background:#0f1b31;color:#f2efe7;font-size:15px;font-family:Georgia,serif}
+  .search input::placeholder{color:#8896b2}
+  .search input:focus{outline:none;border-color:var(--brass-soft);box-shadow:0 0 0 3px rgba(168,130,60,.25)}
+  .search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:17px;height:17px;stroke:#8896b2}
+  .searchstat{font-family:system-ui,sans-serif;font-size:12px;color:#b9c2d4;white-space:nowrap}
+
+  /* Nav */
+  nav{background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40;box-shadow:0 2px 8px rgba(18,32,58,.04)}
+  .navrow{display:flex;gap:2px;overflow-x:auto}
+  .navrow button{font-family:system-ui,sans-serif;background:none;border:none;padding:15px 17px;font-size:13.5px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.15s;letter-spacing:.2px}
+  .navrow button:hover{color:var(--ink);background:var(--paper)}
+  .navrow button.active{color:var(--ink);border-bottom-color:var(--brass);font-weight:700}
+  .navrow button .cnt{display:inline-block;margin-left:6px;background:var(--tag);color:var(--ink-soft);font-size:11px;padding:1px 7px;border-radius:10px;font-weight:600}
+  .navrow button.active .cnt{background:var(--brass);color:#fff}
+
+  main{padding:30px 0 60px;min-height:60vh}
+
+  /* Dashboard */
+  .dash-hero{margin-bottom:28px}
+  .dash-hero .eyebrow{font-family:system-ui,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--brass);font-weight:600;margin-bottom:8px}
+  .dash-hero h2{font-size:30px;line-height:1.2;font-weight:700;max-width:760px;margin-bottom:10px}
+  .dash-hero p{color:var(--ink-soft);max-width:680px;font-size:16px}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:26px 0}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:18px;box-shadow:var(--shadow);cursor:pointer;transition:.18s;border-left:3px solid var(--brass)}
+  .stat:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(18,32,58,.1)}
+  .stat .num{font-size:34px;font-weight:700;color:var(--ink);line-height:1}
+  .stat .lbl{font-family:system-ui,sans-serif;font-size:12.5px;color:var(--muted);margin-top:7px;letter-spacing:.3px}
+  .quick{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:22px;box-shadow:var(--shadow)}
+  .quick h3{font-size:15px;font-family:system-ui,sans-serif;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:14px;font-weight:600}
+  .quick-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+  .quick-item{padding:13px 15px;border:1px solid var(--line);border-radius:7px;font-family:system-ui,sans-serif;font-size:13.5px;cursor:pointer;transition:.15s;display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .quick-item:hover{background:var(--paper);border-color:var(--brass-soft)}
+  .quick-item .k{color:var(--brass);font-weight:700;font-size:12px}
+
+  /* Section head */
+  .sec-head{margin-bottom:18px}
+  .sec-head .eyebrow{font-family:system-ui,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--brass);font-weight:600;margin-bottom:6px}
+  .sec-head h2{font-size:25px;font-weight:700}
+  .sec-head p{color:var(--ink-soft);font-size:14.5px;margin-top:4px;font-family:system-ui,sans-serif}
+  .toolbar{display:flex;gap:10px;align-items:center;margin:16px 0;flex-wrap:wrap}
+  .filterbox{position:relative;flex:1;min-width:200px}
+  .filterbox input{width:100%;padding:9px 12px 9px 34px;border:1px solid var(--line);border-radius:6px;font-size:14px;font-family:Georgia,serif;background:var(--card)}
+  .filterbox input:focus{outline:none;border-color:var(--brass-soft);box-shadow:0 0 0 3px rgba(168,130,60,.15)}
+  .filterbox svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:15px;height:15px;stroke:var(--muted)}
+  .rowcount{font-family:system-ui,sans-serif;font-size:12.5px;color:var(--muted)}
+
+  /* Cards list */
+  .cards{display:grid;gap:14px}
+  .rec{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:18px 20px;box-shadow:var(--shadow);transition:.15s}
+  .rec:hover{border-color:var(--brass-soft);box-shadow:0 4px 16px rgba(18,32,58,.09)}
+  .rec-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:6px}
+  .idtag{font-family:'SF Mono',ui-monospace,monospace;font-size:11.5px;font-weight:700;background:var(--ink);color:var(--brass-soft);padding:3px 9px;border-radius:5px;letter-spacing:.5px;flex-shrink:0;margin-top:2px}
+  .rec-title{font-size:17.5px;font-weight:700;line-height:1.3;color:var(--ink)}
+  .rec-orig{font-style:italic;color:var(--muted);font-size:14px;margin-bottom:10px;padding-left:2px}
+  .fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px 22px;margin-top:10px}
+  .field .fl{font-family:system-ui,sans-serif;font-size:10.5px;letter-spacing:.8px;text-transform:uppercase;color:var(--brass);font-weight:600;margin-bottom:2px}
+  .field .fv{font-size:14px;color:var(--ink-soft)}
+  .chip{display:inline-block;background:var(--tag);color:var(--ink-soft);font-family:'SF Mono',ui-monospace,monospace;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:5px;margin:2px 3px 2px 0;cursor:pointer;transition:.12s;border:1px solid transparent}
+  .chip:hover{background:var(--brass);color:#fff}
+  .chip.static{cursor:default}
+  .chip.static:hover{background:var(--tag);color:var(--ink-soft)}
+  .yes{color:var(--ok);font-weight:600}
+  .no{color:var(--danger)}
+
+  /* Glossary special */
+  .gloss{display:grid;gap:10px}
+  .term{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--brass);border-radius:8px;padding:15px 18px;box-shadow:var(--shadow)}
+  .term-h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:5px}
+  .term-uz{font-size:17px;font-weight:700}
+  .term-en{font-style:italic;color:var(--brass);font-size:14px;font-family:Georgia,serif}
+  .term-def{color:var(--ink-soft);font-size:14.5px}
+
+  .empty{text-align:center;padding:60px 20px;color:var(--muted);font-family:system-ui,sans-serif}
+  .empty svg{width:44px;height:44px;stroke:var(--line);margin-bottom:12px}
+
+  mark{background:#f5e2a8;color:var(--ink);padding:0 2px;border-radius:2px}
+
+  footer{background:var(--ink);color:#9fabc2;font-family:system-ui,sans-serif;font-size:12px;padding:22px 0;text-align:center;line-height:1.8;border-top:3px solid var(--brass)}
+  footer b{color:#d9e0ec}
+
+  a.reslink{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--brass-soft)}
+  a.reslink:hover{color:var(--brass)}
+
+  @media(max-width:640px){
+    .dash-hero h2{font-size:24px}
+    .meta{display:none}
+    .rec-title{font-size:16px}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="seal">ATA</div>
+        <div>
+          <h1>Xalqaro Tijorat Arbitraji — Axborot Tizimi</h1>
+          <div class="sub">Elektron ma'lumotlar bazasi &middot; O'zbekiston qonunchiligi va xalqaro standartlar</div>
+        </div>
+      </div>
+      <div class="meta">
+        Versiya <b>1.0</b> &middot; <b>2026</b><br>
+        Yozuvlar: <b id="totalRec">—</b> &middot; Jadvallar: <b>6</b><br>
+        Til: <b>O'zbek (lotin)</b>
+      </div>
+    </div>
+  </div>
+  <div class="searchband">
+    <div class="wrap">
+      <div class="searchrow">
+        <div class="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="globalSearch" type="text" placeholder="Butun baza bo'yicha qidirish: konventsiya, atama, muassasa, tamoyil...">
+        </div>
+        <div class="searchstat" id="searchStat">Butun baza bo'yicha izlash</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="wrap">
+    <div class="navrow" id="navrow"></div>
+  </div>
+</nav>
+
+<main>
+  <div class="wrap" id="content"></div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <b>Xalqaro Tijorat Arbitraji — Axborot Tizimi (ATAT)</b> &middot; Elektron hisoblash mashinasi uchun ma'lumotlar bazasi dasturi<br>
+    Deponentlashtirishga mo'ljallangan mustaqil dasturiy mahsulot &middot; Barcha ma'lumot dastur tarkibida saqlanadi &middot; 2026
+  </div>
+</footer>
+
+<script>
+const DB = {"Konventsiyalar": {"headers": ["ID", "Hujjat nomi (o'zbekcha)", "Original nomi", "Qabul qilingan yil", "Qabul qiluvchi tashkilot", "Asosiy predmeti", "O'zbekiston ishtiroki", "Izoh"], "rows": [["K01", "Xorijiy arbitraj qarorlarini tan olish va ijro etish to'g'risidagi konventsiya", "New York Convention", "1958", "BMT (UNCITRAL asosida)", "Arbitraj qarorlarini xorijda tan olish va ijro etish", "Ha (a'zo davlat)", "Arbitraj sohasidagi eng muhim xalqaro hujjat; 170+ davlat ishtirokchi"], ["K02", "Xalqaro tijorat arbitraji to'g'risidagi Model qonun", "UNCITRAL Model Law", "1985 (2006-y. o'zgartirishlar bilan)", "UNCITRAL", "Milliy arbitraj qonunchiligi uchun namunaviy asos", "Model sifatida hisobga olingan", "Ko'plab davlatlar milliy qonunlari shu asosda"], ["K03", "Xalqaro tijorat hakamligi to'g'risidagi Yevropa konventsiyasi", "European Convention on Int'l Commercial Arbitration", "1961", "YEIK (Jeneva)", "Yevropa doirasida arbitrajni tartibga solish", "Ishtirokchi emas", "Nyu-York konventsiyasini to'ldiruvchi hujjat"], ["K04", "Investitsiya nizolarini hal qilish to'g'risidagi konventsiya", "ICSID (Washington) Convention", "1965", "Jahon banki", "Davlat-investor investitsiya nizolari", "Ha (a'zo davlat)", "ISDS mexanizmining asosi"], ["K05", "Xalqaro tijorat kelishuvlari to'g'risidagi konventsiya", "Singapore Convention on Mediation", "2019", "UNCITRAL", "Mediatsiya natijasidagi kelishuvlarni ijro etish", "Imzolangan/ratifikatsiya jarayonida", "Mediatsiya bo'yicha 'Nyu-York konventsiyasi' deb ataladi"], ["K06", "Arbitraj qoidalari (UNCITRAL)", "UNCITRAL Arbitration Rules", "1976 (2010, 2021 tahr.)", "UNCITRAL", "Ad hoc arbitraj uchun protsessual qoidalar", "Qo'llash mumkin", "Muassasaga bog'liq bo'lmagan (ad hoc) arbitraj uchun"]]}, "Muassasalar": {"headers": ["ID", "Muassasa nomi", "Qisqartma", "Joylashuvi", "Reglament nomi", "So'nggi tahrir", "Asosiy xususiyati"], "rows": [["M01", "Xalqaro savdo palatasi Arbitraj sudi", "ICC", "Parij (Fransiya)", "ICC Arbitration Rules", "2021", "Eng nufuzli xalqaro tijorat arbitraji markazi"], ["M02", "London Xalqaro Arbitraj Sudi", "LCIA", "London (Buyuk Britaniya)", "LCIA Arbitration Rules", "2020", "Yevropa va umumiy huquq an'analari uchun mashhur"], ["M03", "Singapur Xalqaro Arbitraj Markazi", "SIAC", "Singapur", "SIAC Rules", "2016 (2025 loyiha)", "Osiyo mintaqasidagi yetakchi markaz"], ["M04", "Xitoy Xalqaro Iqtisodiy va Savdo Arbitraj Komissiyasi", "CIETAC", "Pekin (Xitoy)", "CIETAC Arbitration Rules", "2024", "Xitoy bilan bog'liq nizolarda keng qo'llaniladi"], ["M05", "Toshkent Xalqaro Arbitraj Markazi", "TIAC", "Toshkent (O'zbekiston)", "TIAC Reglamenti", "2018", "O'zbekistondagi asosiy xalqaro arbitraj markazi (SPT huzurida)"], ["M06", "Stokgolm Savdo Palatasi Arbitraj instituti", "SCC", "Stokgolm (Shvetsiya)", "SCC Rules", "2023", "Sharqiy Yevropa va investitsiya nizolarida faol"], ["M07", "Xalqaro investitsiya nizolarini hal qilish markazi", "ICSID", "Vashington (AQSh)", "ICSID Rules", "2022", "Davlat-investor nizolari uchun ixtisoslashgan"]]}, "Qonunchilik": {"headers": ["ID", "Normativ hujjat nomi", "Turi", "Qabul qilingan sana", "Tartibga soladigan masala", "Bog'liq konventsiya (ID)"], "rows": [["Q01", "«Xalqaro tijorat arbitraji to'g'risida»gi qonun", "Qonun", "2021-yil 16-fevral", "Xalqaro tijorat arbitraji tashkil etilishi va faoliyati", "K01, K02"], ["Q02", "«Hakamlik sudlari to'g'risida»gi qonun", "Qonun", "2006-yil 16-oktabr", "Ichki hakamlik (treteyskiy) sudlari faoliyati", "—"], ["Q03", "Fuqarolik protsessual kodeksi (tegishli boblari)", "Kodeks", "2018-yil (yangi tahrir)", "Arbitraj qarorlarini tan olish va ijro etish tartibi", "K01"], ["Q04", "Iqtisodiy protsessual kodeks (tegishli normalar)", "Kodeks", "2018-yil", "Xo'jalik nizolarida arbitraj kelishuvi va ijro", "K01"], ["Q05", "«Investitsiyalar va investitsiya faoliyati to'g'risida»gi qonun", "Qonun", "2019-yil 25-dekabr", "Investorlar huquqlari va nizolarni hal qilish kafolatlari", "K04"], ["Q06", "Fuqarolik kodeksi (shartnoma erkinligi normalari)", "Kodeks", "1996-yil", "Arbitraj kelishuvining moddiy-huquqiy asoslari", "—"]]}, "Atamalar": {"headers": ["ID", "Atama (o'zbekcha)", "Inglizcha ekvivalenti", "Ta'rifi"], "rows": [["A01", "Arbitraj kelishuvi", "Arbitration agreement", "Tomonlar o'rtasidagi nizolarni arbitrajga topshirish haqidagi yozma kelishuv"], ["A02", "Arbitraj sharti", "Arbitration clause", "Asosiy shartnoma tarkibidagi arbitrajga oid modda"], ["A03", "Kompetents-kompetents tamoyili", "Kompetenz-Kompetenz", "Arbitraj tribunalining o'z vakolatini o'zi belgilash huquqi"], ["A04", "Arbitraj joyi (o'rni)", "Seat of arbitration", "Arbitrajning huquqiy joylashuvi; qo'llaniladigan protsessual qonunni belgilaydi"], ["A05", "Ad hoc arbitraj", "Ad hoc arbitration", "Muassasa ma'muriyatisiz, tomonlar tomonidan tashkil etiladigan arbitraj"], ["A06", "Institutsional arbitraj", "Institutional arbitration", "Doimiy arbitraj muassasasi ma'muriyatida o'tkaziladigan arbitraj"], ["A07", "Arbitraj qarori", "Arbitral award", "Tribunal tomonidan chiqariladigan yakuniy majburiy qaror"], ["A08", "Tan olish va ijro etish", "Recognition and enforcement", "Chet el arbitraj qarorini milliy sud orqali kuchga kiritish jarayoni"], ["A09", "Public policy (jamoat tartibi)", "Public policy / ordre public", "Qarorni ijro etishdan bosh tortish asosi bo'lishi mumkin bo'lgan davlat tamoyillari"], ["A10", "Separabellik tamoyili", "Separability / severability", "Arbitraj kelishuvi asosiy shartnomadan mustaqil deb qaralishi"], ["A11", "Arbitr (hakam)", "Arbitrator", "Nizoni ko'rib chiqib qaror chiqaruvchi shaxs"], ["A12", "Tribunal (arbitraj hay'ati)", "Arbitral tribunal", "Bir yoki bir necha arbitrdan iborat nizoni hal qiluvchi organ"], ["A13", "Interim choralar", "Interim measures", "Nizo ko'rib chiqilayotganda qo'llaniladigan vaqtinchalik ta'minot choralari"], ["A14", "Qarorni bekor qilish", "Setting aside / annulment", "Arbitraj joyi sudi tomonidan qarorni bekor qilish tartibi"], ["A15", "Qo'llaniladigan huquq", "Applicable / substantive law", "Nizoning mohiyatiga tatbiq etiladigan moddiy huquq"]]}, "Ishlar": {"headers": ["ID", "Holat/Tamoyil", "Huquqiy masala", "Yechim/Tamoyil mohiyati", "Amaliy ahamiyati"], "rows": [["I01", "Arbitraj kelishuvining amal qilishi", "Asosiy shartnoma haqiqiy emas deb topilsa, arbitraj sharti ham bekor bo'ladimi?", "Separabellik tamoyiliga ko'ra arbitraj sharti mustaqil amal qiladi", "Nizolarni arbitrajda ko'rib chiqish barqarorligini ta'minlaydi"], ["I02", "Tribunal vakolati", "Tribunal o'z yurisdiksiyasini o'zi hal qila oladimi?", "Kompetents-kompetents tamoyili buni tasdiqlaydi", "Sud aralashuvini kechiktirib, jarayon tezligini oshiradi"], ["I03", "Qarorni tan olishdan bosh tortish", "Qanday asoslar bilan chet el qarori ijro etilmasligi mumkin?", "Nyu-York konventsiyasi V-moddasidagi cheklangan asoslar", "Ijro etishdan bosh tortish istisno hol ekanligini ko'rsatadi"], ["I04", "Jamoat tartibi", "Public policy asosi qanchalik keng talqin qilinadi?", "Xalqaro amaliyotda tor va istisnoiy talqin qilinadi", "Qarorlarning barqaror ijrosini kafolatlaydi"], ["I05", "Arbitraj joyining ahamiyati", "Arbitraj joyi qanday huquqiy oqibatlarga ega?", "Joy protsessual qonun va bekor qilish yurisdiksiyasini belgilaydi", "Shartnoma tuzishda joyni to'g'ri tanlash muhimligini ko'rsatadi"], ["I06", "Interim choralar ijrosi", "Tribunal buyurgan vaqtinchalik choralar sudda ijro etiladimi?", "UNCITRAL Model qonuni (2006) ijroni nazarda tutadi", "Nizo davomida tomon manfaatlarini himoya qiladi"]]}, "Resurslar": {"headers": ["ID", "Manba nomi", "Turi", "Rasmiy havola/manba", "Izoh"], "rows": [["R01", "UNCITRAL rasmiy sayti", "Xalqaro tashkilot", "uncitral.un.org", "Model qonun, arbitraj qoidalari, matnlar"], ["R02", "Nyu-York konventsiyasi statusi", "Xalqaro reyestr", "newyorkconvention1958.org", "Ishtirokchi davlatlar va amaliyot"], ["R03", "ICC Arbitraj sudi", "Muassasa", "iccwbo.org", "ICC reglamenti va statistikasi"], ["R04", "Lex.uz", "Milliy huquqiy baza", "lex.uz", "O'zbekiston qonun hujjatlari to'plami"], ["R05", "TIAC", "Milliy muassasa", "tiac.uz", "Toshkent xalqaro arbitraj markazi reglamenti"], ["R06", "ICSID", "Xalqaro tashkilot", "icsid.worldbank.org", "Investitsiya nizolari amaliyoti"]]}};
+
+const SHEETS = [
+  {key:'Konventsiyalar', label:'Konventsiyalar', desc:"Xalqaro shartnomalar va namunaviy qonunlar", eyebrow:'Xalqaro hujjatlar'},
+  {key:'Muassasalar', label:'Arbitraj muassasalari', desc:"Yetakchi xalqaro arbitraj markazlari va ularning reglamentlari", eyebrow:'Institutlar'},
+  {key:'Qonunchilik', label:"O'zbekiston qonunchiligi", desc:"Milliy normativ-huquqiy hujjatlar", eyebrow:'Milliy huquq'},
+  {key:'Atamalar', label:'Atamalar lug\u2018ati', desc:"Arbitraj sohasi atamalarining izohli o'zbek-ingliz lug'ati", eyebrow:'Terminologiya'},
+  {key:'Ishlar', label:'Tamoyillar va holatlar', desc:"Nazariy va amaliy ahamiyatga ega huquqiy tamoyillar", eyebrow:'Doktrina'},
+  {key:'Resurslar', label:'Rasmiy manbalar', desc:"Rasmiy manbalar va havolalar", eyebrow:'Manbalar'},
+];
+
+let currentView = 'dash';
+let globalQuery = '';
+const localQueries = {};
+
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function hl(text, q){
+  text = esc(text);
+  if(!q) return text;
+  const rx = new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+  return text.replace(rx,'<mark>$1</mark>');
+}
+
+// Build lookup of all IDs -> {sheet, title}
+const ID_INDEX = {};
+for(const s of SHEETS){
+  const d = DB[s.key]; if(!d) continue;
+  for(const row of d.rows){
+    const id = row[0];
+    ID_INDEX[id] = {sheet:s.key, title:row[1]||id};
+  }
+}
+
+function totalRecords(){
+  return SHEETS.reduce((a,s)=> a + (DB[s.key]?DB[s.key].rows.length:0), 0);
+}
+
+function buildNav(){
+  const nav = document.getElementById('navrow');
+  let html = `<button data-view="dash" class="${currentView==='dash'?'active':''}">Boshqaruv paneli</button>`;
+  for(const s of SHEETS){
+    const n = DB[s.key]?DB[s.key].rows.length:0;
+    html += `<button data-view="${s.key}" class="${currentView===s.key?'active':''}">${esc(s.label)}<span class="cnt">${n}</span></button>`;
+  }
+  nav.innerHTML = html;
+  nav.querySelectorAll('button').forEach(b=>{
+    b.onclick = ()=>{ currentView = b.dataset.view; globalQuery=''; document.getElementById('globalSearch').value=''; render(); window.scrollTo({top:0,behavior:'smooth'}); };
+  });
+}
+
+function matchRow(row, q){
+  if(!q) return true;
+  return row.some(c => String(c).toLowerCase().includes(q.toLowerCase()));
+}
+
+function renderDash(){
+  const c = document.getElementById('content');
+  let stats = SHEETS.map(s=>{
+    const n = DB[s.key]?DB[s.key].rows.length:0;
+    return `<div class="stat" data-go="${s.key}"><div class="num">${n}</div><div class="lbl">${esc(s.label)}</div></div>`;
+  }).join('');
+
+  // quick access: key conventions + institutions
+  const conv = (DB['Konventsiyalar']?DB['Konventsiyalar'].rows:[]).slice(0,4).map(r=>
+    `<div class="quick-item" data-go="Konventsiyalar" data-q="${esc(r[0])}"><span>${esc(r[2]||r[1])}</span><span class="k">${esc(r[0])}</span></div>`).join('');
+  const inst = (DB['Muassasalar']?DB['Muassasalar'].rows:[]).slice(0,4).map(r=>
+    `<div class="quick-item" data-go="Muassasalar" data-q="${esc(r[0])}"><span>${esc(r[2])} — ${esc(r[3])}</span><span class="k">${esc(r[0])}</span></div>`).join('');
+
+  c.innerHTML = `
+    <div class="dash-hero">
+      <div class="eyebrow">Elektron ma'lumotlar bazasi</div>
+      <h2>Xalqaro tijorat arbitraji bo'yicha strukturaviy huquqiy-axborot tizimi</h2>
+      <p>Xalqaro konventsiyalar, arbitraj muassasalari, O'zbekiston qonunchiligi, atamalar va huquqiy tamoyillar bir tizimga birlashtirilgan. Yozuvlar o'zaro ID orqali bog'langan — istalgan havolani bosib, tegishli yozuvga o'ting.</p>
+    </div>
+    <div class="stats">${stats}</div>
+    <div class="quick">
+      <h3>Asosiy hujjatlar</h3>
+      <div class="quick-grid">${conv}</div>
+      <h3 style="margin-top:22px">Yetakchi muassasalar</h3>
+      <div class="quick-grid">${inst}</div>
+    </div>`;
+
+  c.querySelectorAll('[data-go]').forEach(el=>{
+    el.onclick = ()=>{
+      currentView = el.dataset.go;
+      if(el.dataset.q){ localQueries[currentView]=el.dataset.q; }
+      render(); window.scrollTo({top:0,behavior:'smooth'});
+    };
+  });
+}
+
+function idChips(str){
+  // parse "K01, K02" or "—"
+  if(!str || str==='\u2014' || str==='-') return '<span class="chip static">\u2014</span>';
+  return String(str).split(/[,;]/).map(x=>x.trim()).filter(Boolean).map(id=>{
+    if(ID_INDEX[id]) return `<span class="chip" data-id="${esc(id)}">${esc(id)}</span>`;
+    return `<span class="chip static">${esc(id)}</span>`;
+  }).join('');
+}
+
+function renderGlossary(q){
+  const d = DB['Atamalar'];
+  const rows = d.rows.filter(r=>matchRow(r,q));
+  if(!rows.length) return emptyState();
+  return `<div class="gloss">`+ rows.map(r=>`
+    <div class="term">
+      <div class="term-h">
+        <span class="term-uz">${hl(r[1],q)}</span>
+        <span class="term-en">${hl(r[2],q)}</span>
+      </div>
+      <div class="term-def">${hl(r[3],q)}</div>
+    </div>`).join('') + `</div>`;
+}
+
+function renderResources(q){
+  const d = DB['Resurslar'];
+  const rows = d.rows.filter(r=>matchRow(r,q));
+  if(!rows.length) return emptyState();
+  return `<div class="cards">`+ rows.map(r=>{
+    const url = r[3]; const href = url.startsWith('http')?url:'https://'+url;
+    return `<div class="rec">
+      <div class="rec-top"><span class="idtag">${esc(r[0])}</span><span class="rec-title">${hl(r[1],q)}</span></div>
+      <div class="fields">
+        <div class="field"><div class="fl">Turi</div><div class="fv">${hl(r[2],q)}</div></div>
+        <div class="field"><div class="fl">Manba</div><div class="fv"><a class="reslink" href="${esc(href)}" target="_blank" rel="noopener">${hl(r[3],q)}</a></div></div>
+        <div class="field"><div class="fl">Izoh</div><div class="fv">${hl(r[4],q)}</div></div>
+      </div>
+    </div>`;
+  }).join('') + `</div>`;
+}
+
+function renderGeneric(sheetKey, q){
+  const d = DB[sheetKey];
+  const H = d.headers;
+  const rows = d.rows.filter(r=>matchRow(r,q));
+  if(!rows.length) return emptyState();
+
+  return `<div class="cards">`+ rows.map(r=>{
+    // detect original-name column (Konventsiyalar has orig at idx2)
+    let titleIdx = 1, origIdx = -1;
+    if(sheetKey==='Konventsiyalar'){ origIdx = 2; }
+    if(sheetKey==='Muassasalar'){ /* title=1, qisqartma=2 */ }
+
+    let head = `<div class="rec-top"><span class="idtag">${esc(r[0])}</span><span class="rec-title">${hl(r[titleIdx],q)}</span></div>`;
+    let orig = '';
+    if(origIdx>0 && r[origIdx]) orig = `<div class="rec-orig">${hl(r[origIdx],q)}</div>`;
+
+    // fields = everything except ID, title, orig
+    const skip = new Set([0, titleIdx]); if(origIdx>0) skip.add(origIdx);
+    let fields = '';
+    for(let i=0;i<H.length;i++){
+      if(skip.has(i)) continue;
+      const label = H[i]; let val = r[i];
+      let rendered;
+      // link columns (contain "ID)")
+      if(/\(ID\)/i.test(label)){
+        rendered = idChips(val);
+      } else if(/ishtirok/i.test(label)){
+        const yes = /ha/i.test(val); rendered = `<span class="${yes?'yes':'no'}">${hl(val,q)}</span>`;
+      } else {
+        rendered = hl(val,q);
+      }
+      fields += `<div class="field"><div class="fl">${esc(label)}</div><div class="fv">${rendered}</div></div>`;
+    }
+    return `<div class="rec">${head}${orig}<div class="fields">${fields}</div></div>`;
+  }).join('') + `</div>`;
+}
+
+function emptyState(){
+  return `<div class="empty">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+    <div>Hech qanday yozuv topilmadi. Boshqa so'z bilan izlab ko'ring.</div>
+  </div>`;
+}
+
+function renderSheet(sheetKey){
+  const s = SHEETS.find(x=>x.key===sheetKey);
+  const q = localQueries[sheetKey]||'';
+  const d = DB[sheetKey];
+  const shown = d.rows.filter(r=>matchRow(r,q)).length;
+
+  let body;
+  if(sheetKey==='Atamalar') body = renderGlossary(q);
+  else if(sheetKey==='Resurslar') body = renderResources(q);
+  else body = renderGeneric(sheetKey,q);
+
+  const c = document.getElementById('content');
+  c.innerHTML = `
+    <div class="sec-head">
+      <div class="eyebrow">${esc(s.eyebrow)}</div>
+      <h2>${esc(s.label)}</h2>
+      <p>${esc(s.desc)}</p>
+    </div>
+    <div class="toolbar">
+      <div class="filterbox">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="localFilter" type="text" placeholder="Ushbu bo'lim ichida filtrlash..." value="${esc(q)}">
+      </div>
+      <div class="rowcount"><b>${shown}</b> / ${d.rows.length} yozuv</div>
+    </div>
+    <div id="sheetBody">${body}</div>`;
+
+  const lf = document.getElementById('localFilter');
+  lf.oninput = ()=>{ localQueries[sheetKey]=lf.value; refreshSheetBody(sheetKey); };
+  // keep focus
+  const val=lf.value; lf.focus(); lf.setSelectionRange(val.length,val.length);
+  bindChips();
+}
+
+function refreshSheetBody(sheetKey){
+  const q = localQueries[sheetKey]||'';
+  const d = DB[sheetKey];
+  let body;
+  if(sheetKey==='Atamalar') body = renderGlossary(q);
+  else if(sheetKey==='Resurslar') body = renderResources(q);
+  else body = renderGeneric(sheetKey,q);
+  document.getElementById('sheetBody').innerHTML = body;
+  const shown = d.rows.filter(r=>matchRow(r,q)).length;
+  document.querySelector('.rowcount').innerHTML = `<b>${shown}</b> / ${d.rows.length} yozuv`;
+  bindChips();
+}
+
+function bindChips(){
+  document.querySelectorAll('.chip[data-id]').forEach(ch=>{
+    ch.onclick = ()=>{
+      const ref = ID_INDEX[ch.dataset.id];
+      if(!ref) return;
+      currentView = ref.sheet;
+      localQueries[currentView] = ch.dataset.id;
+      render(); window.scrollTo({top:0,behavior:'smooth'});
+    };
+  });
+}
+
+// Global search across all sheets
+function renderGlobalResults(q){
+  const c = document.getElementById('content');
+  let total=0, blocks='';
+  for(const s of SHEETS){
+    const d = DB[s.key]; if(!d) continue;
+    const rows = d.rows.filter(r=>matchRow(r,q));
+    if(!rows.length) continue;
+    total += rows.length;
+    let items = rows.map(r=>{
+      const title = s.key==='Atamalar' ? `${esc(r[1])} — <i>${esc(r[2])}</i>` : esc(r[1]);
+      const snippet = s.key==='Atamalar'? r[3] : (r[2]||r[4]||r[3]||'');
+      return `<div class="rec" style="cursor:pointer" data-go="${s.key}" data-q="${esc(r[0])}">
+        <div class="rec-top"><span class="idtag">${esc(r[0])}</span><span class="rec-title">${hl(String(s.key==='Atamalar'?r[1]+' — '+r[2]:r[1]),q)}</span></div>
+        <div class="field"><div class="fv">${hl(String(snippet),q)}</div></div>
+      </div>`;
+    }).join('');
+    blocks += `<div class="sec-head" style="margin-top:22px"><div class="eyebrow">${esc(s.eyebrow)}</div><h2 style="font-size:19px">${esc(s.label)} <span style="color:var(--muted);font-weight:400;font-size:14px">(${rows.length})</span></h2></div><div class="cards">${items}</div>`;
+  }
+  c.innerHTML = `<div class="sec-head"><div class="eyebrow">Qidiruv natijalari</div><h2>&ldquo;${esc(q)}&rdquo; — ${total} ta yozuv</h2></div>${total?blocks:emptyState()}`;
+  c.querySelectorAll('[data-go]').forEach(el=>{
+    el.onclick = ()=>{ currentView=el.dataset.go; localQueries[currentView]=el.dataset.q; globalQuery=''; document.getElementById('globalSearch').value=''; render(); window.scrollTo({top:0,behavior:'smooth'}); };
+  });
+}
+
+function render(){
+  buildNav();
+  if(globalQuery){ renderGlobalResults(globalQuery); return; }
+  if(currentView==='dash') renderDash();
+  else renderSheet(currentView);
+}
+
+document.getElementById('totalRec').textContent = totalRecords();
+document.getElementById('globalSearch').addEventListener('input', e=>{
+  globalQuery = e.target.value.trim();
+  const stat = document.getElementById('searchStat');
+  if(globalQuery){ render(); stat.textContent='Butun baza bo\u2018yicha'; }
+  else { render(); stat.textContent="Butun baza bo'yicha izlash"; }
+});
+
+render();
+</script>
+</body>
+</html>
